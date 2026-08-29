@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My XMLHttpRequest Activity</title>
+</head>
+
+<body>
+
+    <h1>XMLHttpRequest Demo</h1>
+
+    <p>Click the button to get post information from the server.</p>
+
+    <button id="getPost">Load Post Data</button>
+
+    <div id="output"></div>
+
+    <script>
+        const button = document.getElementById("getPost");
+        const result = document.getElementById("output");
+
+        button.addEventListener("click", function () {
+
+            const request = new XMLHttpRequest();
+
+            request.open(
+                "GET",
+                "https://jsonplaceholder.typicode.com/posts/1",
+                true
+            );
+
+            request.onload = function () {
+
+                if (request.status === 200) {
+
+                    const post = JSON.parse(request.responseText);
+
+                    result.innerHTML =
+                        "<h3>Post Information</h3>" +
+                        "<p><b>Title:</b> " + post.title + "</p>" +
+                        "<p><b>Content:</b> " + post.body + "</p>";
+
+                } else {
+
+                    result.innerHTML =
+                        "<p style='color:red;'>Unable to load the post.</p>";
+                }
+            };
+
+            request.onerror = function () {
+                result.innerHTML =
+                    "<p style='color:red;'>Network error occurred.</p>";
+            };
+
+            request.send();
+        });
+    </script>
+
+</body>
+</html>
