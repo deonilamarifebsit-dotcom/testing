@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Final Lab#3 Fetch API</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            margin-bottom: 35px;
+        }
+
+        button {
+            border: none;
+            padding: 16px 35px;
+            margin: 8px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+        }
+
+        #loadButton {
+            background-color: #20b82d;
+        }
+
+        #getButton {
+            background-color: #1688e8;
+        }
+
+        #postButton {
+            background-color: #e69a20;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        #requestButtons {
+            display: none;
+        }
+
+        #output {
+            display: none;
+            width: 70%;
+            max-width: 700px;
+            margin: 35px auto;
+            padding: 25px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: left;
+            line-height: 1.6;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .get-title {
+            color: #1688e8;
+        }
+
+        .post-title {
+            color: #e69a20;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My Final Lab#3 Fetch API</h1>
+
+    <!-- First Button -->
+    <div id="loadSection">
+        <button id="loadButton">Load Post Data</button>
+    </div>
+
+    <!-- GET and POST Buttons -->
+    <div id="requestButtons">
+        <button id="getButton">GET Request</button>
+        <button id="postButton">POST Request</button>
+    </div>
+
+    <!-- Result Area -->
+    <div id="output">
+        Waiting for a request...
+    </div>
+
+
+    <script>
+
+        const loadButton = document.getElementById("loadButton");
+        const requestButtons = document.getElementById("requestButtons");
+        const output = document.getElementById("output");
+
+
+        // LOAD POST DATA BUTTON
+        loadButton.addEventListener("click", function() {
+
+            document.getElementById("loadSection").style.display = "none";
+
+            requestButtons.style.display = "block";
+
+            output.style.display = "none";
+        });
+
+
+        // GET REQUEST
+        document.getElementById("getButton").addEventListener("click", function() {
+
+            output.style.display = "block";
+            output.innerHTML = "Loading GET request...";
+
+            fetch("https://jsonplaceholder.typicode.com/posts/1")
+
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error("HTTP Error: " + response.status);
+                    }
+
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    output.innerHTML = `
+                        <h2 class="get-title">GET Request Result</h2>
+
+                        <strong>Post Title:</strong>
+                        <p>${data.title}</p>
+
+                        <strong>Content:</strong>
+                        <p>${data.body}</p>
+                    `;
+
+                })
+
+                .catch(error => {
+
+                    output.innerHTML = `
+                        <p class="error">
+                            Error: ${error.message}
+                        </p>
+                    `;
+
+                });
+
+        });
+
+
+        // POST REQUEST
+        document.getElementById("postButton").addEventListener("click", function() {
+
+            output.style.display = "block";
+            output.innerHTML = "Sending POST request...";
+
+            const postData = {
+                title: "My New Post",
+                body: "Learning Fetch API is fun!",
+                userId: 1
+            };
+
+            fetch("https://jsonplaceholder.typicode.com/posts", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(postData)
+
+            })
+
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error("HTTP Error: " + response.status);
+                }
+
+                return response.json();
+
+            })
+
+            .then(data => {
+
+                output.innerHTML = `
+                    <h2 class="post-title">POST Request Result</h2>
+
+                    <strong>New Post Created!</strong>
+
+                    <p>
+                        <strong>Post ID:</strong> ${data.id}
+                    </p>
+
+                
+                `;
+
+            })
+
+            .catch(error => {
+
+                output.innerHTML = `
+                    <p class="error">
+                        Error: ${error.message}
+                    </p>
+                `;
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

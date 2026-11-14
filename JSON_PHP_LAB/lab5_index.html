@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab 5</title>
+</head>
+
+<body>
+
+    <h2>Lab Exercise 5</h2>
+
+
+    <p id="result"></p>
+
+    <script>
+         {
+
+            let name = document.getElementById("name").value;
+
+            let data = {
+                name: name
+            };
+
+            fetch("lab5.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById("result").innerText =
+                    JSON.stringify(result);
+            });
+
+        }
+    </script>
+
+</body>
+</html>
